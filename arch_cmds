@@ -1,0 +1,31 @@
+#To update the whole system
+pacman -Syu
+
+#Search for package
+pacman -Ss
+
+#Install a package
+pacman -S
+yay -S
+
+#See all installed packages
+pacman -Q
+
+#Synchronize and update only AUR packages
+yay -Sua
+
+#Remove a package and it's dependencies and config files
+pacman -Rs
+yay -Rns
+
+#Change backlight
+sudo xbacklight -set #
+
+#List wifi networks
+nmcli device wifi list
+
+#Add wifi network
+nmcli device wifi connect "I Believe Wi Can Fi" password Redwingssuck
+
+#Change wallpaper
+Edit ~/.fehbg to include file path to new image
