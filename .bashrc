@@ -56,6 +56,12 @@ alias vim="nvim"
 alias vi="nvim"
 alias v="nvim"
 
+# Dvorak keyboard aliases
+alias asdf="setxkbmap real-prog-dvorak"
+alias aoeu="setxkbmap us"
+alias lkj="setxkbmap real-prog-dvorak"
+alias snth="setxkbmap us"
+
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
