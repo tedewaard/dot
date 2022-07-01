@@ -65,7 +65,7 @@ call plug#end()
 "EOF
 
 "Load Lua modules
-lua require("telescope")
+lua require("tele")
 
 
 "Colorscheme gruvbox
