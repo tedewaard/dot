@@ -34,7 +34,7 @@ set undofile
 let mapleader = " "
 
 "Reload init.vim without leaving nvim
-nnoremap <Leader>r :source $MYVIMRC<CR>
+"nnoremap <Leader>r :source $MYVIMRC<CR> ----Not working
 
 
 call plug#begin()
@@ -51,11 +51,15 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+"Devicons for telescope (I needed to install a nerd font) 
+Plug 'kyazdani42/nvim-web-devicons'
 
 "Color scheme
-Plug 'gruvbox-community/gruvbox'
+"Plug 'gruvbox-community/gruvbox'
 
 Plug 'vim-airline/vim-airline'
+
+Plug 'folke/tokyonight.nvim'
 
 
 call plug#end()
@@ -69,4 +73,13 @@ lua require("tele")
 
 
 "Colorscheme gruvbox
-colorscheme gruvbox
+colorscheme tokyonight 
+
+
+"Below are remaps
+"<cr> means return or enter
+
+"Telescope Commands
+"nnoremap <C-s> :Telescope current_buffer_fuzzy_find sorting_strategy=ascending <cr>
+"This is the Lua command of the one above
+nnoremap <C-s> <cmd>lua require('telescope.builtin').current_buffer_fuzzy_find({sorting_strategy='ascending', prompt_position='top'}) <cr>
