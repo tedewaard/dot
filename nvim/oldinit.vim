@@ -69,7 +69,7 @@ call plug#end()
 "EOF
 
 "Load Lua modules
-lua require("tele")
+lua require("tedewaard/tele")
 
 
 "Colorscheme gruvbox

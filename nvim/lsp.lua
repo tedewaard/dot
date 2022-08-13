@@ -1,3 +1,0 @@
--- Native NVIM LSP Setup
--- Make sure language server exists in path. Example being gopls for GoLang
--- Tell nvim to use gopls or whichever language server we want
