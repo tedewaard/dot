@@ -46,6 +46,15 @@ return require('packer').startup(function(use)
     --Devicons for telescope (I needed to install a nerd font) 
     use 'kyazdani42/nvim-web-devicons'
 
+    --LSP
+    use("neovim/nvim-lspconfig") 
+    use("hrsh7th/nvim-cmp")
+    use("hrsh7th/cmp-nvim-lsp")
+    use("hrsh7th/cmp-buffer")
+    use("hrsh7th/cmp-path")
+    use("L3MON4D3/LuaSnip")
+    use("saadparwaiz1/cmp_luasnip")
+
     if packer_bootstrap then
         require('packer').sync()
     end
