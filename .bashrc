@@ -78,6 +78,7 @@ fi
 alias f5='f5fpc --info'
 alias :q='exit'
 alias lm='xrandr --listmonitors'
+alias uw='xrandr --output HDMI-2 --mode "3440x1440'
 
 alias ss='systemctl suspend'
 
