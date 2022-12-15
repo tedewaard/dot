@@ -6,3 +6,7 @@ local xnoremap = Remap.xnoremap
 local nmap = Remap.nmap
 
 nnoremap("<leader>f", ":Ex<CR>")
+
+--Center after moving up or down
+nnoremap("<C-d>", "<C-d>zz")
+nnoremap("<C-u>", "<C-u>zz")
