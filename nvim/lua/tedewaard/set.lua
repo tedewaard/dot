@@ -3,8 +3,6 @@ vim.opt.guicursor = ""
 vim.opt.nu = true
 vim.opt.relativenumber = true
 
-vim.opt.errorbells = false
-
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
@@ -35,9 +33,4 @@ vim.opt.cmdheight = 1
 -- delays and poor user experience.
 vim.opt.updatetime = 50
 
--- Don't pass messages to |ins-completion-menu|.
-vim.opt.shortmess:append("c")
-
 vim.opt.colorcolumn = "80"
-
-vim.g.mapleader = " "

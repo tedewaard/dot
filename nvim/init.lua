@@ -1,3 +1,5 @@
-require("tedewaard.set")
-require("tedewaard.packer")
-require("tedewaard.tele")
+require("tedewaard")
+
+--require("tedewaard.set")
+--require("tedewaard.packer")
+--require("tedewaard.tele")
