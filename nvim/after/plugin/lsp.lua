@@ -7,6 +7,7 @@ lsp.ensure_installed({
   'eslint',
   'sumneko_lua',
   'rust_analyzer',
+  'gopls',
 })
 
 local cmp = require('cmp')
@@ -29,6 +30,7 @@ lsp.setup_nvim_cmp({
 
 lsp.set_preferences({
     suggest_lsp_servers = false,
+    configure_diagnostics = true,
     sign_icons = {
         error = 'E',
         warn = 'W',
@@ -37,9 +39,6 @@ lsp.set_preferences({
     }
 })
 
-vim.diagnostic.config({
-    virtual_text = true,
-})
 
 lsp.on_attach(function(client, bufnr)
   local opts = {buffer = bufnr, remap = false}
@@ -62,3 +61,13 @@ lsp.on_attach(function(client, bufnr)
 end)
 
 lsp.setup()
+
+--Needs to be called after lsp.setup() because we are also using the recommended settings set at beggining
+vim.diagnostic.config({
+    virtual_text = true,
+    signs = true,
+    update_in_insert = false,
+    underline = true,
+    severity_sort = false,
+    float = true,
+})
