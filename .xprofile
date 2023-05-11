@@ -1,0 +1,3 @@
+feh --bg-color black "$@" &
+/home/tedewaard/Repository/dwm-bar/dwm_bar.sh &
+compton &
