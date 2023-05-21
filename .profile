@@ -37,3 +37,14 @@ export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 VERSION=v19.4.0
 DISTRO=linux-x64
 export PATH=/usr/local/lib/nodejs/node-$VERSION-$DISTRO/bin:$PATH
+
+# add Flatpak apps to PATH
+if [ -d "/var/lib/flatpak/exports/bin" ]; then
+    PATH="/var/lib/flatpak/exports/bin:$PATH"
+fi
+
+if [ -d "$HOME/.local/share/flatpak/exports/bin" ]; then
+     PATH="$HOME/.local/share/flatpak/exports/bin:$PATH"
+fi
+
+export PATH
