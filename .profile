@@ -48,3 +48,6 @@ if [ -d "$HOME/.local/share/flatpak/exports/bin" ]; then
 fi
 
 export PATH
+
+# opam configuration
+test -r /home/tedewaard/.opam/opam-init/init.sh && . /home/tedewaard/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
