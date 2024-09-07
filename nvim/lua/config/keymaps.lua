@@ -4,7 +4,7 @@
 -- vim.g.mapleader = " "
 
 -- Open netrw
-vim.keymap.set("n", "<leader>f", vim.cmd.Ex)
+vim.keymap.set("n", "<leader>f", ":Oil<CR>")
 
 -- Move line up and down in visual mode
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
