@@ -13,3 +13,7 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 --Center after moving up or down
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
+
+--Toggle diagnostics
+vim.keymap.set("n", "gl", ":lua vim.diagnostic.open_float()<CR>")
+
