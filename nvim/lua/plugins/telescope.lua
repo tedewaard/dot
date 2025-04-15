@@ -1,12 +1,18 @@
 return {
-    'nvim-telescope/telescope.nvim', tag = '0.1.4',
+    'nvim-telescope/telescope.nvim',
+    tag = '0.1.8',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    keys = {
-        { "<leader>sf", "<cmd>lua require('telescope.builtin').find_files()<cr>", desc = "Find ltin.find_filesFiles"},
-        { "<leader>gf", "<cmd>lua require('telescope.builtin').git_files()<cr>", desc = "Find git files"},
-        { "<leader>lg", "<cmd>lua require('telescope.builtin').live_grep()<cr>", desc = "Live grep for string"},
-    }
+    config = function()
+        -- Set up any telescope configuration here if needed
+        --
+        local builtin = require('telescope.builtin')
+        vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = "Find Files" })
+        vim.keymap.set('n', '<leader>gf', builtin.git_files, { desc = "Find git files" })
+        vim.keymap.set('n', '<leader>lg', builtin.live_grep, { desc = "Live grep for string" })
+        vim.keymap.set('n', '<leader>sw', function()
+            builtin.find_files({
+                cwd = "~/wiki",
+            })
+            end, { desc = "Find files in wiki directory"})
+    end,
 }
-
--- To improve sorting performance I can install telescope-fzf-native.nvim
--- Live grep requires that ripgrep is installed
