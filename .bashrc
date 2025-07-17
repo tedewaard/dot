@@ -36,6 +36,8 @@ xterm*|rxvt*)
     ;;
 esac
 
+tmux
+
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -84,6 +86,8 @@ alias lm='xrandr --listmonitors'
 alias uw='xrandr --output eDP-1 --off && xrandr --output HDMI-2 --mode "3440x1440" --scale ".75x.75"'
 
 alias ss='systemctl suspend'
+
+alias k='kubectl'
 
 
 #Set bash to use vi keybindings
