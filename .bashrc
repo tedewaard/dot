@@ -13,6 +13,12 @@ parse_git_branch() {
     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
 }
 
+function g(){
+    files=$(find ~/repo -maxdepth 1 -mindepth 1 -type d; find ~/serepo -maxdepth 1 -mindepth 1 -type d)
+    dir=$(echo "$files" | sort | fzf -1 -0 -q "$1")
+    cd "$dir"
+}
+
 #New PS1
 export PS1="\u@\h \[\e[32m\]\w \[\e[91m\]\$(parse_git_branch)\[\e[00m\]$ "
 
@@ -35,8 +41,6 @@ xterm*|rxvt*)
 *)
     ;;
 esac
-
-tmux
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
@@ -84,10 +88,9 @@ alias f5='f5fpc --info'
 alias :q='exit'
 alias lm='xrandr --listmonitors'
 alias uw='xrandr --output eDP-1 --off && xrandr --output HDMI-2 --mode "3440x1440" --scale ".75x.75"'
-
 alias ss='systemctl suspend'
-
 alias k='kubectl'
+alias op='cd $(fd -t d | fzf) && nvim'
 
 
 #Set bash to use vi keybindings
