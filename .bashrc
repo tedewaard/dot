@@ -19,6 +19,13 @@ function g(){
     cd "$dir"
 }
 
+function kc(){
+    files=$(find ~/.kube -maxdepth 1 -mindepth 1 -type f)    
+    file=$(echo "$files" | sort | fzf -1 -0 -q "$1")
+    echo $file
+    export KUBECONFIG=$file
+}
+
 #New PS1
 export PS1="\u@\h \[\e[32m\]\w \[\e[91m\]\$(parse_git_branch)\[\e[00m\]$ "
 
