@@ -13,6 +13,12 @@ parse_git_branch() {
     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
 }
 
+parse_kube_config() {
+    if [ -n "$KUBECONFIG" ]; then
+        echo "[$(basename "$KUBECONFIG")]"
+    fi
+}
+
 function g(){
     files=$(find ~/repo -maxdepth 1 -mindepth 1 -type d; find ~/serepo -maxdepth 1 -mindepth 1 -type d)
     dir=$(echo "$files" | sort | fzf -1 -0 -q "$1")
@@ -27,7 +33,8 @@ function kc(){
 }
 
 #New PS1
-export PS1="\u@\h \[\e[32m\]\w \[\e[91m\]\$(parse_git_branch)\[\e[00m\]$ "
+#export PS1="\u@\h \[\e[32m\]\w \[\e[91m\]\$(parse_git_branch)\[\e[00m\]$ "
+export PS1="\u@\h \[\e[32m\]\w \[\e[91m\]\$(parse_git_branch)\[\e[36m\]\$(parse_kube_config)\[\e[00m\]$ "
 
 
 #Old PS1
