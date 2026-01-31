@@ -104,6 +104,7 @@ alias lm='xrandr --listmonitors'
 alias uw='xrandr --output eDP-1 --off && xrandr --output HDMI-2 --mode "3440x1440" --scale ".75x.75"'
 alias ss='systemctl suspend'
 alias k='kubectl'
+complete -o default -F __start_kubectl k
 alias op='cd $(fd -t d | fzf) && nvim'
 
 
@@ -123,8 +124,23 @@ fi
 . "$HOME/.cargo/env"
 
 export PATH="/home/tedewaard/.local/bin/:$PATH"
+export PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:~/go/bin
+export PATH=$HOME/.elixir-install/installs/otp/28.1/bin:$PATH
+export PATH=$HOME/.elixir-install/installs/elixir/1.19.0-otp-28/bin:$PATH
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 eval "$(zoxide init bash)"
+
+alias claude="/home/tedewaard/.claude/local/claude"
+
+#Enable flux bash completion
+. <(flux completion bash)
+
+#Enable kubectl tab completion
+source <(kubectl completion bash)
+
+# opencode
+export PATH=/home/tedewaard/.opencode/bin:$PATH
