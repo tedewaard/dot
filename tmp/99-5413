@@ -1,0 +1,7 @@
+    -- This keymap triggers visual mode selection handling
+    -- When you visually select code and press <leader>9v, it sends
+    -- the selected text to the 99 plugin for AI-powered code generation
+    -- The visual selection will be replaced with AI-generated code
+    vim.keymap.set("v", "<leader>9v", function()
+      _99.visual()
+    end)
