@@ -12,7 +12,8 @@ vim.api.nvim_create_autocmd("User", {
     end,
 })
 
-local lsp_configs = {}
+local lsp_configs = {
+}
 
 for _, f in pairs(vim.api.nvim_get_runtime_file('lsp/*.lua', true)) do
   local server_name = vim.fn.fnamemodify(f, ':t:r')

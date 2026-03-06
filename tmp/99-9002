@@ -1,6 +1,0 @@
-    -- Keymap works because _99 is in scope as a local variable.
-    -- To use from command line, use: :lua require("99").search()
-    -- The local variable pattern is intentional - keymaps are the recommended interface.
-    vim.keymap.set("n", "<leader>9s", function()
-      _99.search()
-    end)
