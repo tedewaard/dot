@@ -86,12 +86,6 @@ alias vim="nvim"
 alias vi="nvim"
 alias v="nvim"
 
-# Dvorak keyboard aliases
-alias asdf="setxkbmap real-prog-dvorak"
-alias aoeu="setxkbmap us"
-alias lkj="setxkbmap real-prog-dvorak"
-alias snth="setxkbmap us"
-
 # Flatpak aliases
 alias telegram="flatpak run org.telegram.desktop & disown"
 
@@ -116,6 +110,7 @@ alias ss='systemctl suspend'
 alias k='kubectl'
 complete -o default -F __start_kubectl k
 alias op='cd $(fd -t d | fzf) && nvim'
+alias ts='tmux-sessionizer'
 
 
 #Set bash to use vi keybindings
