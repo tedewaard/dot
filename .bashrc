@@ -19,17 +19,27 @@ parse_kube_config() {
     fi
 }
 
-function g(){
+g(){
     files=$(find ~/repo -maxdepth 1 -mindepth 1 -type d; find ~/serepo -maxdepth 1 -mindepth 1 -type d)
     dir=$(echo "$files" | sort | fzf -1 -0 -q "$1")
     cd "$dir"
 }
 
-function kc(){
+kc(){
     files=$(find ~/.kube -maxdepth 1 -mindepth 1 -type f)    
     file=$(echo "$files" | sort | fzf -1 -0 -q "$1")
     echo $file
     export KUBECONFIG=$file
+}
+
+# Easily select which field I want
+field() {
+	awk -F "${2:- }" "{ print \$${1:-1} }"
+}
+
+# Sum up a column of numbers
+total() {
+	awk -F "${2:- }" "{ s += \$${1:-1} } END { print s }"
 }
 
 #New PS1
@@ -144,3 +154,7 @@ source <(kubectl completion bash)
 
 # opencode
 export PATH=/home/tedewaard/.opencode/bin:$PATH
+
+# Added by flyctl installer
+export FLYCTL_INSTALL="/home/tedewaard/.fly"
+export PATH="$FLYCTL_INSTALL/bin:$PATH"
