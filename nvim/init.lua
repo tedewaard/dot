@@ -1,6 +1,7 @@
 vim.g.mapleader = " " -- Make sure to set 'mapleader' before lazy so your mappings are correct
 require("config.options")
 require("config.lazy")
+require("config.osc52")
 
 -- Not fully confident in how this autocmd gets triggered
 vim.api.nvim_create_autocmd("User", {
