@@ -20,7 +20,7 @@ parse_kube_config() {
 }
 
 g(){
-    files=$(find ~/repo -maxdepth 1 -mindepth 1 -type d; find ~/serepo -maxdepth 1 -mindepth 1 -type d)
+    files=$(find ~/repo -maxdepth 1 -mindepth 1 -type d; find ~/serepo -maxdepth 1 -mindepth 1 -type d; find ~/pptrepo -maxdepth 1 -mindepth 1 -type d)
     dir=$(echo "$files" | sort | fzf -1 -0 -q "$1")
     cd "$dir"
 }
@@ -85,6 +85,7 @@ alias l='ls -CF'
 alias vim="nvim"
 alias vi="nvim"
 alias v="nvim"
+alias kcpu="kubectl get nodes -o custom-columns='NAME:.metadata.name,CPU:.status.capacity.cpu,MEMORY:.status.capacity.memory'"
 
 # Flatpak aliases
 alias telegram="flatpak run org.telegram.desktop & disown"
@@ -139,7 +140,6 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 eval "$(zoxide init bash)"
 
-alias claude="/home/tedewaard/.claude/local/claude"
 
 #Enable flux bash completion
 . <(flux completion bash)
@@ -149,6 +149,9 @@ source <(kubectl completion bash)
 
 # opencode
 export PATH=/home/tedewaard/.opencode/bin:$PATH
+
+# npm global (user-writable)
+export PATH="$HOME/.npm-global/bin:$PATH"
 
 # Added by flyctl installer
 export FLYCTL_INSTALL="/home/tedewaard/.fly"
