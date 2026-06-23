@@ -13,7 +13,7 @@
 #
 # Symlink Mappings:
 #   Home Directory:
-#     .bashrc, .profile, .tmux.conf, .xinitrc, .xprofile
+#     .bashrc, .zshrc, .profile, .tmux.conf, .xinitrc, .xprofile
 #
 #   ~/.config/:
 #     nvim/, helix/, awesome/ (from awesomewm/), tmux-sessionizer/
@@ -42,6 +42,7 @@ readonly NC='\033[0m' # No Color
 # Files to symlink to home directory
 readonly HOME_FILES=(
     ".bashrc"
+    ".zshrc"
     ".profile"
     ".tmux.conf"
     ".xinitrc"
@@ -49,12 +50,19 @@ readonly HOME_FILES=(
 )
 
 # Directories to symlink to ~/.config
-# Format: "source_dir:target_name"
-declare -A CONFIG_DIRS=(
-    ["nvim"]="nvim"
-    ["helix"]="helix"
-    ["awesomewm"]="awesome"
-    ["tmux-sessionizer"]="tmux-sessionizer"
+# Parallel arrays (avoids associative arrays, which require Bash 4+;
+# macOS ships Bash 3.2 by default).
+readonly CONFIG_DIR_SOURCES=(
+    "nvim"
+    "helix"
+    "awesomewm"
+    "tmux-sessionizer"
+)
+readonly CONFIG_DIR_TARGETS=(
+    "nvim"
+    "helix"
+    "awesome"
+    "tmux-sessionizer"
 )
 
 # TPM repository URL
@@ -201,7 +209,7 @@ validate_environment() {
     done
 
     # Check for expected directories
-    for source_dir in "${!CONFIG_DIRS[@]}"; do
+    for source_dir in "${CONFIG_DIR_SOURCES[@]}"; do
         if [ ! -d "$DOTFILES_DIR/$source_dir" ]; then
             print_warning "Expected directory not found: $source_dir"
         fi
@@ -238,8 +246,10 @@ symlink_config_directories() {
     # Ensure ~/.config exists
     ensure_directory "$HOME/.config"
 
-    for source_dir in "${!CONFIG_DIRS[@]}"; do
-        local target_name="${CONFIG_DIRS[$source_dir]}"
+    local i
+    for i in "${!CONFIG_DIR_SOURCES[@]}"; do
+        local source_dir="${CONFIG_DIR_SOURCES[$i]}"
+        local target_name="${CONFIG_DIR_TARGETS[$i]}"
         local source="$DOTFILES_DIR/$source_dir"
         local target="$HOME/.config/$target_name"
 
@@ -317,8 +327,10 @@ verify_installation() {
     done
 
     # Check config directories
-    for source_dir in "${!CONFIG_DIRS[@]}"; do
-        local target_name="${CONFIG_DIRS[$source_dir]}"
+    local i
+    for i in "${!CONFIG_DIR_SOURCES[@]}"; do
+        local source_dir="${CONFIG_DIR_SOURCES[$i]}"
+        local target_name="${CONFIG_DIR_TARGETS[$i]}"
         local source="$DOTFILES_DIR/$source_dir"
         local target="$HOME/.config/$target_name"
 
@@ -366,7 +378,7 @@ print_post_install_instructions() {
 
     echo -e "\n${BOLD}Next Steps:${NC}"
     echo -e "  ${BLUE}1.${NC} Reload your shell configuration:"
-    echo -e "     ${YELLOW}source ~/.bashrc${NC}  or restart your terminal"
+    echo -e "     ${YELLOW}source ~/.bashrc${NC} or ${YELLOW}source ~/.zshrc${NC}, or restart your terminal"
     echo -e ""
     echo -e "  ${BLUE}2.${NC} Install tmux plugins (if using tmux):"
     echo -e "     Open tmux and press ${YELLOW}Ctrl-A${NC} + ${YELLOW}I${NC} (capital i)"
