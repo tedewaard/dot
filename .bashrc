@@ -156,3 +156,36 @@ export PATH="$HOME/.npm-global/bin:$PATH"
 # Added by flyctl installer
 export FLYCTL_INSTALL="/home/tedewaard/.fly"
 export PATH="$FLYCTL_INSTALL/bin:$PATH"
+
+
+
+# Log in to an Azure Container Registry using a short-lived Entra token.
+# Usage: acr-login <registry-name>   (name only, not the full .azurecr.io FQDN)
+acr-login() {
+  local registry="$1"
+
+  if [ -z "$registry" ]; then
+    echo "Usage: acr-login <registry-name>" >&2
+    return 1
+  fi
+
+  # Ensure az is present and we have an active Azure session.
+  if ! command -v az >/dev/null 2>&1; then
+    echo "acr-login: 'az' CLI not found on PATH" >&2
+    return 1
+  fi
+  if ! az account show >/dev/null 2>&1; then
+    echo "acr-login: not logged in to Azure — run 'az login' first" >&2
+    return 1
+  fi
+
+  local token
+  token=$(az acr login --name "$registry" --expose-token --output tsv --query accessToken) || {
+    echo "acr-login: failed to obtain token for '$registry'" >&2
+    return 1
+  }
+
+  echo "$token" | podman login "${registry}.azurecr.io" \
+    --username 00000000-0000-0000-0000-000000000000 \
+    --password-stdin
+}
