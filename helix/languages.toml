@@ -1,0 +1,20 @@
+[[language]]
+name = "markdown"
+language-server = ["marksman"]
+
+[language-server.taplo]
+config = {}
+#root_dir = [".git", "*.toml"]
+
+[[language]]
+name = "powershell"
+scope = "source.ps1"
+file-types = ["ps1", "psm1"]
+roots = [".git"]
+comment-token = "#"
+indent = { tab-width = 4, unit = "    " }
+language-servers = [ "powershell-editor-services" ]
+
+[language-server.powershell-editor-services]
+command = "pwsh"
+args = ["-NoLogo", "-NoProfile", "-Command", "$env:USERPROFILE\\AppData\\Local\\nvim-data\\mason\\packages\\powershell-editor-services\\PowerShellEditorServices\\Start-EditorServices.ps1 -BundledModulesPath $env:USERPROFILE\\AppData\\Local\\nvim-data\\mason\\packages\\powershell-editor-services -SessionDetailsPath $env:USERPROFILE\\AppData\\Local\\nvim-data\\mason\\packages\\powershell-editor-services\\PowerShellEditorServices.sessions.json -LogPath $env:USERPROFILE\\AppData\\Local\\nvim-data\\mason\\packages\\powershell-editor-services\\PowerShellEditorServices.log -FeatureFlags @() -AdditionalModules @() -HostName helix -HostProfileId 0 -HostVersion 1.0.0 -Stdio -LogLevel Normal"]
