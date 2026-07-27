@@ -17,6 +17,7 @@
 #
 #   ~/.config/:
 #     nvim/, helix/, awesome/ (from awesomewm/), tmux-sessionizer/
+#     herdr/config.toml (single file, dir left writable for runtime state)
 #
 
 # ============================================================================
@@ -63,6 +64,18 @@ readonly CONFIG_DIR_TARGETS=(
     "helix"
     "awesome"
     "tmux-sessionizer"
+)
+
+# Individual files to symlink into ~/.config subdirectories.
+# Use this (instead of CONFIG_DIR_*) when only a single file should be linked
+# and the parent directory must stay a real directory the app can write to.
+# Parallel arrays: source path (relative to DOTFILES_DIR) and target path
+# (relative to ~/.config).
+readonly CONFIG_FILE_SOURCES=(
+    "herdr/config.toml"
+)
+readonly CONFIG_FILE_TARGETS=(
+    "herdr/config.toml"
 )
 
 # TPM repository URL
@@ -215,6 +228,13 @@ validate_environment() {
         fi
     done
 
+    # Check for expected config files
+    for source_file in "${CONFIG_FILE_SOURCES[@]}"; do
+        if [ ! -f "$DOTFILES_DIR/$source_file" ]; then
+            print_warning "Expected file not found: $source_file"
+        fi
+    done
+
     if [ "$all_valid" = false ]; then
         return 1
     fi
@@ -257,6 +277,31 @@ symlink_config_directories() {
             create_symlink "$source" "$target"
         else
             print_warning "Skipping missing directory: $source_dir"
+        fi
+    done
+}
+
+# Symlink individual files into ~/.config subdirectories
+symlink_config_files() {
+    print_header "Symlinking Config Files"
+
+    # Ensure ~/.config exists
+    ensure_directory "$HOME/.config"
+
+    local i
+    for i in "${!CONFIG_FILE_SOURCES[@]}"; do
+        local source_file="${CONFIG_FILE_SOURCES[$i]}"
+        local target_rel="${CONFIG_FILE_TARGETS[$i]}"
+        local source="$DOTFILES_DIR/$source_file"
+        local target="$HOME/.config/$target_rel"
+
+        if [ -f "$source" ]; then
+            # Make sure the parent directory exists (e.g. ~/.config/herdr).
+            # It stays a real directory so the app can write runtime state there.
+            ensure_directory "$(dirname "$target")"
+            create_symlink "$source" "$target"
+        else
+            print_warning "Skipping missing file: $source_file"
         fi
     done
 }
@@ -358,6 +403,37 @@ verify_installation() {
         fi
     done
 
+    # Check config files
+    for i in "${!CONFIG_FILE_SOURCES[@]}"; do
+        local source_file="${CONFIG_FILE_SOURCES[$i]}"
+        local target_rel="${CONFIG_FILE_TARGETS[$i]}"
+        local source="$DOTFILES_DIR/$source_file"
+        local target="$HOME/.config/$target_rel"
+
+        if [ ! -f "$source" ]; then
+            continue  # Skip files that don't exist in source
+        fi
+
+        ((checked++)) || true
+
+        if [ -L "$target" ]; then
+            local current_target
+            current_target="$(readlink -f "$target")"
+            local expected_target
+            expected_target="$(readlink -f "$source")"
+
+            if [ "$current_target" = "$expected_target" ]; then
+                ((valid++)) || true
+            else
+                print_error "Invalid symlink: ${target/#$HOME/\~}"
+                all_valid=false
+            fi
+        else
+            print_error "Not a symlink: ${target/#$HOME/\~}"
+            all_valid=false
+        fi
+    done
+
     if [ "$all_valid" = true ]; then
         print_success "All $valid/$checked symlinks verified successfully"
         return 0
@@ -419,13 +495,16 @@ main() {
     # Step 3: Symlink config directories
     symlink_config_directories
 
-    # Step 4: Install TPM
+    # Step 4: Symlink individual config files
+    symlink_config_files
+
+    # Step 5: Install TPM
     install_tpm
 
-    # Step 5: Verify installation
+    # Step 6: Verify installation
     verify_installation
 
-    # Step 6: Print post-install instructions
+    # Step 7: Print post-install instructions
     print_post_install_instructions
 
     echo -e "${GREEN}${BOLD}✓ Installation successful!${NC}\n"
