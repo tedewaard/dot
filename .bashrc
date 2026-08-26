@@ -189,3 +189,7 @@ acr-login() {
     --username 00000000-0000-0000-0000-000000000000 \
     --password-stdin
 }
+
+. "$HOME/.atuin/bin/env"
+eval "$(atuin init bash)"
+export NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/cisco-umbrella-root.crt

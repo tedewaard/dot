@@ -1,3 +1,4 @@
+onboarding = false
 # herdr configuration
 # Place this file at ~/.config/herdr/config.toml
 
@@ -84,7 +85,7 @@ rename_workspace = ""
 # remote_image_paste = "ctrl+v" # only active in herdr --remote; empty disables raw-key image paste
 # new_tab = "prefix+c"
 # rename_tab = "prefix+shift+t"
-previous_tab = "prefix+a"
+previous_tab = "prefix+p"
 # next_tab = "prefix+n"
 # switch_tab = "prefix+1..9"
 # switch_workspace = ""   # optional indexed binding, e.g. "prefix+shift+1..9"
@@ -97,7 +98,7 @@ previous_tab = "prefix+a"
 # focus_pane_right = "prefix+l"
 # cycle_pane_next = "prefix+tab"
 # cycle_pane_previous = "prefix+shift+tab"
-# last_pane = ""          # optional, unset by default; bind e.g. "prefix+tab" for global back-and-forth
+last_pane = "prefix+a"          # optional, unset by default; bind e.g. "prefix+tab" for global back-and-forth
 # split_vertical = "prefix+v"
 # split_horizontal = "prefix+minus"
 # close_pane = "prefix+x"
