@@ -23,6 +23,10 @@
 #     pi/settings.json, pi/extensions/ (dir stays writable for pi's runtime
 #     state: auth.json, sessions/, bin/, models-store.json, etc.)
 #
+#   Agent skills (shared across AI harnesses, Agent Skills standard):
+#     skills/ -> ~/.agents/skills (pi, standard location)
+#     skills/ -> ~/.claude/skills (Claude Code)
+#
 
 # ============================================================================
 # CONFIGURATION
@@ -94,6 +98,15 @@ readonly PI_SOURCES=(
 readonly PI_TARGETS=(
     "settings.json"
     "extensions"
+)
+
+# Agent skills: one canonical, harness-neutral skills directory symlinked into
+# each AI harness's discovery location. Targets are relative to $HOME.
+# Parent dirs (e.g. ~/.claude) stay real directories for harness runtime state.
+readonly SKILLS_SOURCE="skills"
+readonly SKILLS_TARGETS=(
+    ".agents/skills"
+    ".claude/skills"
 )
 
 # TPM repository URL
@@ -345,6 +358,25 @@ symlink_pi_files() {
     done
 }
 
+# Symlink the shared agent skills directory into each harness location
+symlink_skills() {
+    print_header "Symlinking Agent Skills"
+
+    local source="$DOTFILES_DIR/$SKILLS_SOURCE"
+
+    if [ ! -d "$source" ]; then
+        print_warning "Skipping missing skills directory: $SKILLS_SOURCE"
+        return 0
+    fi
+
+    local target_rel
+    for target_rel in "${SKILLS_TARGETS[@]}"; do
+        local target="$HOME/$target_rel"
+        ensure_directory "$(dirname "$target")"
+        create_symlink "$source" "$target"
+    done
+}
+
 # Install Tmux Plugin Manager
 install_tpm() {
     print_header "Installing Tmux Plugin Manager (TPM)"
@@ -473,6 +505,34 @@ verify_installation() {
         fi
     done
 
+    # Check skills symlinks
+    if [ -d "$DOTFILES_DIR/$SKILLS_SOURCE" ]; then
+        local target_rel
+        for target_rel in "${SKILLS_TARGETS[@]}"; do
+            local source="$DOTFILES_DIR/$SKILLS_SOURCE"
+            local target="$HOME/$target_rel"
+
+            ((checked++)) || true
+
+            if [ -L "$target" ]; then
+                local current_target
+                current_target="$(readlink -f "$target")"
+                local expected_target
+                expected_target="$(readlink -f "$source")"
+
+                if [ "$current_target" = "$expected_target" ]; then
+                    ((valid++)) || true
+                else
+                    print_error "Invalid symlink: ${target/#$HOME/\~}"
+                    all_valid=false
+                fi
+            else
+                print_error "Not a symlink: ${target/#$HOME/\~}"
+                all_valid=false
+            fi
+        done
+    fi
+
     # Check pi files
     for i in "${!PI_SOURCES[@]}"; do
         local source="$DOTFILES_DIR/${PI_SOURCES[$i]}"
@@ -569,13 +629,16 @@ main() {
     # Step 5: Symlink pi agent config
     symlink_pi_files
 
-    # Step 6: Install TPM
+    # Step 6: Symlink shared agent skills
+    symlink_skills
+
+    # Step 7: Install TPM
     install_tpm
 
-    # Step 7: Verify installation
+    # Step 8: Verify installation
     verify_installation
 
-    # Step 8: Print post-install instructions
+    # Step 9: Print post-install instructions
     print_post_install_instructions
 
     echo -e "${GREEN}${BOLD}✓ Installation successful!${NC}\n"

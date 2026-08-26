@@ -57,6 +57,12 @@ Manager) into `~/.tmux/plugins/tpm` if it isn't there already.
   `pi install` are declared in `settings.json` (tracked) but download into
   `~/.pi/agent/npm|git/` (untracked) and reinstall automatically on new machines; `~/.pi/agent/` itself stays a real directory because pi writes runtime
   state there (`auth.json` secrets, `sessions/`, `bin/`, `models-store.json`).
+- [`skills/`](skills/) — shared agent skills following the
+  [Agent Skills standard](https://agentskills.io). One canonical directory,
+  symlinked into every harness's discovery location: `~/.agents/skills` (pi /
+  standard) and `~/.claude/skills` (Claude Code). Each skill is a directory with
+  a `SKILL.md`; keep the directory name matching the frontmatter `name` for
+  cross-harness portability.
 
 If you've already cloned the repo manually you can skip the bootstrap and just
 run `./install.sh` directly.
