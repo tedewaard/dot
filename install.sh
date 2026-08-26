@@ -19,6 +19,10 @@
 #     nvim/, helix/, awesome/ (from awesomewm/), tmux-sessionizer/
 #     herdr/config.toml (single file, dir left writable for runtime state)
 #
+#   ~/.pi/agent/:
+#     pi/settings.json, pi/extensions/ (dir stays writable for pi's runtime
+#     state: auth.json, sessions/, bin/, models-store.json, etc.)
+#
 
 # ============================================================================
 # CONFIGURATION
@@ -76,6 +80,20 @@ readonly CONFIG_FILE_SOURCES=(
 )
 readonly CONFIG_FILE_TARGETS=(
     "herdr/config.toml"
+)
+
+# Files/dirs to symlink into ~/.pi/agent (pi coding agent).
+# Only hand-written config goes here -- never auth.json, sessions/, bin/,
+# npm/, models-store.json, or trust.json (secrets / machine-local state).
+# Parallel arrays: source path (relative to DOTFILES_DIR) and target path
+# (relative to ~/.pi/agent). Entries may be files or directories.
+readonly PI_SOURCES=(
+    "pi/settings.json"
+    "pi/extensions"
+)
+readonly PI_TARGETS=(
+    "settings.json"
+    "extensions"
 )
 
 # TPM repository URL
@@ -306,6 +324,27 @@ symlink_config_files() {
     done
 }
 
+# Symlink pi coding agent config into ~/.pi/agent
+symlink_pi_files() {
+    print_header "Symlinking Pi Agent Config"
+
+    # Parent dir stays a real directory so pi can write runtime state there.
+    ensure_directory "$HOME/.pi/agent"
+
+    local i
+    for i in "${!PI_SOURCES[@]}"; do
+        local source="$DOTFILES_DIR/${PI_SOURCES[$i]}"
+        local target="$HOME/.pi/agent/${PI_TARGETS[$i]}"
+
+        if [ -e "$source" ]; then
+            ensure_directory "$(dirname "$target")"
+            create_symlink "$source" "$target"
+        else
+            print_warning "Skipping missing pi config: ${PI_SOURCES[$i]}"
+        fi
+    done
+}
+
 # Install Tmux Plugin Manager
 install_tpm() {
     print_header "Installing Tmux Plugin Manager (TPM)"
@@ -434,6 +473,35 @@ verify_installation() {
         fi
     done
 
+    # Check pi files
+    for i in "${!PI_SOURCES[@]}"; do
+        local source="$DOTFILES_DIR/${PI_SOURCES[$i]}"
+        local target="$HOME/.pi/agent/${PI_TARGETS[$i]}"
+
+        if [ ! -e "$source" ]; then
+            continue  # Skip entries that don't exist in source
+        fi
+
+        ((checked++)) || true
+
+        if [ -L "$target" ]; then
+            local current_target
+            current_target="$(readlink -f "$target")"
+            local expected_target
+            expected_target="$(readlink -f "$source")"
+
+            if [ "$current_target" = "$expected_target" ]; then
+                ((valid++)) || true
+            else
+                print_error "Invalid symlink: ${target/#$HOME/\~}"
+                all_valid=false
+            fi
+        else
+            print_error "Not a symlink: ${target/#$HOME/\~}"
+            all_valid=false
+        fi
+    done
+
     if [ "$all_valid" = true ]; then
         print_success "All $valid/$checked symlinks verified successfully"
         return 0
@@ -498,13 +566,16 @@ main() {
     # Step 4: Symlink individual config files
     symlink_config_files
 
-    # Step 5: Install TPM
+    # Step 5: Symlink pi agent config
+    symlink_pi_files
+
+    # Step 6: Install TPM
     install_tpm
 
-    # Step 6: Verify installation
+    # Step 7: Verify installation
     verify_installation
 
-    # Step 7: Print post-install instructions
+    # Step 8: Print post-install instructions
     print_post_install_instructions
 
     echo -e "${GREEN}${BOLD}✓ Installation successful!${NC}\n"
