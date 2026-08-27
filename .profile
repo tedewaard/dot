@@ -26,7 +26,7 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-export NEURALWATT_API_KEY=sk-fe19c7f42961cdba241756ee2c0958c56963485f80f2a6dc4d8fdcb272103de9
+export NEURALWATT_API_KEY=sk-5ff267f3a2774b7331d8a9b8a6542f8d1c5bfe0daf029734fe587b797d5bfbab
 export PATH=$PATH:/usr/local/go/bin
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
@@ -51,3 +51,5 @@ export PATH
 
 # opam configuration
 test -r /home/tedewaard/.opam/opam-init/init.sh && . /home/tedewaard/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
+
+. "$HOME/.atuin/bin/env"

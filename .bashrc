@@ -8,6 +8,14 @@
 
 alias ls='ls --color=auto'
 
+# Fix command history with tmux
+shopt -s histappend           # append on exit instead of overwriting
+HISTSIZE=100000               # in-memory entries
+HISTFILESIZE=200000           # lines kept on disk
+HISTCONTROL=ignoreboth        # drop dupes and space-prefixed commands
+HISTTIMEFORMAT='%F %T '       # timestamps
+PROMPT_COMMAND='history -a; history -n'   # flush to disk after every command
+
 # Adding git branch to command prompt
 parse_git_branch() {
     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
@@ -189,3 +197,6 @@ acr-login() {
     --username 00000000-0000-0000-0000-000000000000 \
     --password-stdin
 }
+
+. "$HOME/.atuin/bin/env"
+eval "$(atuin init bash)"
