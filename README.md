@@ -49,8 +49,20 @@ Manager) into `~/.tmux/plugins/tpm` if it isn't there already.
   dotfiles via `BASH_SOURCE`, which doesn't work when piped straight over the
   network. Same pattern Homebrew / oh-my-zsh / nvm use.
 - [`install.sh`](install.sh) — does the actual work: symlink home files,
-  symlink `~/.config` directories, install TPM, verify everything holds. Safe to
-  run repeatedly.
+  symlink `~/.config` directories, symlink pi agent config into `~/.pi/agent/`,
+  install TPM, verify everything holds. Safe to run repeatedly.
+- [`pi/`](pi/) — config for the pi coding agent. Only hand-written config lives
+  here (`settings.json`, `extensions/` for custom extensions, and later
+  `AGENTS.md`, `keybindings.json`, themes, etc.). Packages added via
+  `pi install` are declared in `settings.json` (tracked) but download into
+  `~/.pi/agent/npm|git/` (untracked) and reinstall automatically on new machines; `~/.pi/agent/` itself stays a real directory because pi writes runtime
+  state there (`auth.json` secrets, `sessions/`, `bin/`, `models-store.json`).
+- [`skills/`](skills/) — shared agent skills following the
+  [Agent Skills standard](https://agentskills.io). One canonical directory,
+  symlinked into every harness's discovery location: `~/.agents/skills` (pi /
+  standard) and `~/.claude/skills` (Claude Code). Each skill is a directory with
+  a `SKILL.md`; keep the directory name matching the frontmatter `name` for
+  cross-harness portability.
 
 If you've already cloned the repo manually you can skip the bootstrap and just
 run `./install.sh` directly.

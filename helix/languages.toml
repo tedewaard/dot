@@ -1,10 +1,6 @@
 [[language]]
 name = "markdown"
-language-server = ["marksman"]
-
-[language-server.taplo]
-config = {}
-#root_dir = [".git", "*.toml"]
+language-servers = ["marksman"]
 
 [[language]]
 name = "powershell"

@@ -26,7 +26,6 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-export NEURALWATT_API_KEY=sk-5ff267f3a2774b7331d8a9b8a6542f8d1c5bfe0daf029734fe587b797d5bfbab
 export PATH=$PATH:/usr/local/go/bin
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin

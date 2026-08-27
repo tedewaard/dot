@@ -198,5 +198,9 @@ acr-login() {
     --password-stdin
 }
 
+#atuin
 . "$HOME/.atuin/bin/env"
 eval "$(atuin init bash)"
+
+#Fix for WSL on PPT laptop
+export NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/cisco-umbrella-root.crt
