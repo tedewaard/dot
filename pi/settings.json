@@ -1,12 +1,16 @@
 {
-  "lastChangelogVersion": "0.84.4",
+  "lastChangelogVersion": "0.85.1",
   "defaultProvider": "anthropic",
-  "defaultModel": "claude-opus-4-8",
+  "defaultModel": "claude-fable-5",
   "packages": [
     "npm:pi-web-access",
     "npm:@tintinweb/pi-subagents",
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:@narumitw/pi-plan-mode",
-    "npm:cc-safety-net"
-  ]
+    "npm:cc-safety-net",
+    "npm:pi-mcp-adapter"
+  ],
+  "warnings": {
+    "anthropicExtraUsage": true
+  }
 }
