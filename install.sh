@@ -18,6 +18,7 @@
 #   ~/.config/:
 #     nvim/, helix/, awesome/ (from awesomewm/), tmux-sessionizer/
 #     herdr/config.toml (single file, dir left writable for runtime state)
+#     mcp/mcp.json (single file, dir left writable for runtime state)
 #
 #   ~/.pi/agent/:
 #     pi/settings.json, pi/extensions/ (dir stays writable for pi's runtime
@@ -81,9 +82,11 @@ readonly CONFIG_DIR_TARGETS=(
 # (relative to ~/.config).
 readonly CONFIG_FILE_SOURCES=(
     "herdr/config.toml"
+    "mcp/mcp.json"
 )
 readonly CONFIG_FILE_TARGETS=(
     "herdr/config.toml"
+    "mcp/mcp.json"
 )
 
 # Files/dirs to symlink into ~/.pi/agent (pi coding agent).

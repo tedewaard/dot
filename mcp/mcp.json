@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "k8s-mcp": {
+      "url": "http://localhost:8080/mcp"
+    },
+    "gitlab": {
+      "url": "https://gitlab.com/api/v4/mcp",
+      "auth": "oauth",
+      "protocolVersion": "auto"
+    }
+  }
+}
