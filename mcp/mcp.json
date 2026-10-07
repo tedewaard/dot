@@ -3,6 +3,22 @@
     "k8s-mcp": {
       "url": "http://localhost:8080/mcp"
     },
+    "infra-mcp": {
+     "url": "https://infra-mcp.staging.serviceexpress.com/mcp",
+     "auth": "oauth",
+     "oauth": {
+       "clientId": "613d4050-727e-4bdd-a296-632cd55d8fe4",
+       "scope": "https://infra-mcp.staging.serviceexpress.com/mcp/Infra.Read offline_access"
+     }
+   },
+    "datto-rmm": {
+      "url": "https://datto-mcp.staging.serviceexpress.com/mcp",
+      "auth": "oauth",
+      "oauth": {
+        "clientId": "570129f1-81a8-45d1-ac7c-ae10f51976c8",
+        "scope": "https://datto-mcp.staging.serviceexpress.com/mcp/Datto.Read offline_access"
+      }
+    },
     "gitlab": {
       "url": "https://gitlab.com/api/v4/mcp",
       "auth": "oauth",

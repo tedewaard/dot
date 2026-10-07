@@ -1,7 +1,7 @@
 {
-  "lastChangelogVersion": "0.85.1",
+  "lastChangelogVersion": "1.0.3",
   "defaultProvider": "anthropic",
-  "defaultModel": "claude-fable-5",
+  "defaultModel": "claude-opus-5-5",
   "packages": [
     "npm:pi-web-access",
     "npm:@tintinweb/pi-subagents",
@@ -11,6 +11,10 @@
     "npm:pi-mcp-adapter"
   ],
   "warnings": {
-    "anthropicExtraUsage": true
-  }
+    "anthropicExtraUsage": false
+  },
+  "theme": "dark",
+  "extensions": [
+    "-builtin:mcp"
+  ]
 }
