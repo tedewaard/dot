@@ -11,7 +11,8 @@
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:@narumitw/pi-plan-mode",
     "npm:cc-safety-net",
-    "npm:pi-mcp-adapter"
+    "npm:pi-mcp-adapter",
+    "npm:pi-beads-companion"
   ],
   "warnings": {
     "anthropicExtraUsage": false

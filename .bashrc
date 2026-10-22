@@ -208,3 +208,4 @@ eval "$(atuin init bash)"
 export NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/cisco-umbrella-root.crt
 
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
+source <(bd completion bash)
