@@ -143,6 +143,8 @@ export PATH=$PATH:~/go/bin
 export PATH=$HOME/.elixir-install/installs/otp/28.1/bin:$PATH
 export PATH=$HOME/.elixir-install/installs/elixir/1.19.0-otp-28/bin:$PATH
 
+export BEADS_DIR="$HOME/serepo/issues/.beads"
+
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
@@ -204,3 +206,5 @@ eval "$(atuin init bash)"
 
 #Fix for WSL on PPT laptop
 export NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/cisco-umbrella-root.crt
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"

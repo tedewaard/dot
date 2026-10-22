@@ -1,7 +1,10 @@
 {
-  "lastChangelogVersion": "1.0.3",
+  "lastChangelogVersion": "1.3.0",
   "defaultProvider": "anthropic",
   "defaultModel": "claude-opus-5-5",
+  "defaultTools": [
+    "+codemode"
+  ],
   "packages": [
     "npm:pi-web-access",
     "npm:@tintinweb/pi-subagents",

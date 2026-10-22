@@ -21,7 +21,7 @@
 #     mcp/mcp.json (single file, dir left writable for runtime state)
 #
 #   ~/.pi/agent/:
-#     pi/settings.json, pi/extensions/ (dir stays writable for pi's runtime
+#     pi/settings.json, pi/AGENTS.md, pi/extensions/ (dir stays writable for pi's runtime
 #     state: auth.json, sessions/, bin/, models-store.json, etc.)
 #
 #   Agent skills (shared across AI harnesses, Agent Skills standard):
@@ -96,10 +96,12 @@ readonly CONFIG_FILE_TARGETS=(
 # (relative to ~/.pi/agent). Entries may be files or directories.
 readonly PI_SOURCES=(
     "pi/settings.json"
+    "pi/AGENTS.md"
     "pi/extensions"
 )
 readonly PI_TARGETS=(
     "settings.json"
+    "AGENTS.md"
     "extensions"
 )
 
