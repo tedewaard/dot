@@ -147,16 +147,30 @@ export PATH=$HOME/.elixir-install/installs/elixir/1.19.0-otp-28/bin:$PATH
 export BEADS_DIR="$HOME/serepo/issues/.beads"
 
 export NVM_DIR="$HOME/.nvm"
+# nvm runs `manpath` when MANPATH is unset; on WSL that scans /mnt/c and is slow (~700ms).
+# An empty entry (":") tells man to still include the default system paths.
+export MANPATH="${MANPATH:-:}"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 eval "$(zoxide init bash)"
 
 
-#Enable flux bash completion
-. <(flux completion bash)
-
-#Enable kubectl tab completion
-source <(kubectl completion bash)
+# Cached shell completions (generating them on every start is slow).
+# Missing cache files are created on first run. Run `refresh_completions`
+# after you upgrade kubectl, flux or bd.
+_completion_cache_dir="$HOME/.cache/bash-completions"
+_cached_completion() {
+    local cmd="$1" file="$_completion_cache_dir/$1.bash"
+    if [ ! -s "$file" ] && command -v "$cmd" >/dev/null 2>&1; then
+        mkdir -p "$_completion_cache_dir"
+        "$cmd" completion bash > "$file" 2>/dev/null || rm -f "$file"
+    fi
+    [ -s "$file" ] && . "$file"
+}
+refresh_completions() {
+    rm -f "$_completion_cache_dir"/{kubectl,flux,bd}.bash
+    for c in kubectl flux bd; do _cached_completion "$c"; done
+}
 
 # opencode
 export PATH=/home/tedewaard/.opencode/bin:$PATH
@@ -209,4 +223,7 @@ eval "$(atuin init bash)"
 export NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/cisco-umbrella-root.crt
 
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
-source <(bd completion bash)
+
+# Load completions last so every tool is on PATH.
+for _c in kubectl flux bd; do _cached_completion "$_c"; done
+unset _c
