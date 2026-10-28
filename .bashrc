@@ -94,7 +94,8 @@ alias vim="nvim"
 alias vi="nvim"
 alias v="nvim"
 alias kcpu="kubectl get nodes -o custom-columns='NAME:.metadata.name,CPU:.status.capacity.cpu,MEMORY:.status.capacity.memory'"
-alias mybd='bd list -a "Trevor Edewaard"'
+# Open beads assigned to me OR created by me (owner = creator's git email)
+alias mybd='bd query "assignee=\"Trevor Edewaard\" OR owner=\"trevor.edewaard@parkplacetech.com\""'
 
 # Flatpak aliases
 alias telegram="flatpak run org.telegram.desktop & disown"

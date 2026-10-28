@@ -1,5 +1,9 @@
 {
   "mcpServers": {
+    "confluence-mcp": {
+      "url": "https://mcp.atlassian.com/v2/mcp",
+      "description": "Atlassian Jira/Confluence (read-only). Default Confluence space: IT (Infrastructure Team), spaceId 4136206340, cloudId 3a68b21f-5874-466e-82c2-7257745ab38f. Scope Confluence searches with CQL 'space = IT' unless another space is named."
+    },
     "k8s-mcp": {
       "url": "http://localhost:8080/mcp"
     },
