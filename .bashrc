@@ -50,6 +50,12 @@ total() {
 	awk -F "${2:- }" "{ s += \$${1:-1} } END { print s }"
 }
 
+# Run an ad-hoc shell command on several hosts with Ansible.
+# Usage: acmd "10.0.0.11,10.0.0.12" "ip a; uptime" [extra ansible args, e.g. -b -u user]
+acmd() {
+	ansible all -i "${1%,}," -m shell -a "$2" "${@:3}"
+}
+
 #New PS1
 #export PS1="\u@\h \[\e[32m\]\w \[\e[91m\]\$(parse_git_branch)\[\e[00m\]$ "
 export PS1="\u@\h \[\e[32m\]\w \[\e[91m\]\$(parse_git_branch)\[\e[36m\]\$(parse_kube_config)\[\e[00m\]$ "
