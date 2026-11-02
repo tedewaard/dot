@@ -12,7 +12,9 @@
     "npm:@narumitw/pi-plan-mode",
     "npm:cc-safety-net",
     "npm:pi-mcp-adapter",
-    "npm:pi-beads-companion"
+    "npm:pi-beads-companion",
+    "npm:egm",
+    "npm:@rizkiaprita/egm"
   ],
   "warnings": {
     "anthropicExtraUsage": false
@@ -20,5 +22,7 @@
   "theme": "dark",
   "extensions": [
     "-builtin:mcp"
-  ]
+  ],
+  "defaultProjectTrust": "ask",
+  "quietStartup": true
 }
