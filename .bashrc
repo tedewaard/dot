@@ -101,7 +101,17 @@ alias vi="nvim"
 alias v="nvim"
 alias kcpu="kubectl get nodes -o custom-columns='NAME:.metadata.name,CPU:.status.capacity.cpu,MEMORY:.status.capacity.memory'"
 # Open beads assigned to me OR created by me (owner = creator's git email)
-alias mybd='bd query "assignee=\"Trevor Edewaard\" OR owner=\"trevor.edewaard@parkplacetech.com\""'
+# My open beads (assigned to me OR owned by me), shown as an epic/child tree.
+# bd query can't render trees, so collect the IDs with it and hand them to bd list.
+# Extra args pass through to bd list (e.g. mybd -p 1, mybd --long).
+unalias mybd 2>/dev/null  # drop the old alias so re-sourcing works and the function isn't shadowed
+function mybd {
+  local ids
+  # BD_JSON_ENVELOPE=1 opts into the bd v2.0 JSON shape ({schema_version, data:[...]}) for this call only.
+  ids=$(BD_JSON_ENVELOPE=1 bd query 'assignee="Trevor Edewaard" OR owner="trevor.edewaard@parkplacetech.com"' --json | jq -r '.data[].id' | paste -sd,)
+  [ -z "$ids" ] && { echo "No issues found"; return 0; }
+  bd list --id "$ids" -n 0 "$@"
+}
 
 # Flatpak aliases
 alias telegram="flatpak run org.telegram.desktop & disown"
