@@ -16,9 +16,19 @@ HISTCONTROL=ignoreboth        # drop dupes and space-prefixed commands
 HISTTIMEFORMAT='%F %T '       # timestamps
 PROMPT_COMMAND='history -a; history -n'   # flush to disk after every command
 
-# Adding git branch to command prompt
+# Adding VCS info (jj or git) to command prompt
+# jj: (nearest-bookmark›change-id), ∅ = empty change, ! = conflict
 parse_git_branch() {
-    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+    if jj --ignore-working-copy root >/dev/null 2>&1; then
+        local bm cur
+        bm=$(jj log --ignore-working-copy --no-graph -r 'heads(::@ & bookmarks())' \
+             -T 'bookmarks.map(|b| b.name()).join(",")' 2>/dev/null)
+        cur=$(jj log --ignore-working-copy --no-graph -r @ \
+             -T 'change_id.shortest() ++ if(empty,"∅") ++ if(conflict,"!")' 2>/dev/null)
+        echo "(${bm:+$bm›}$cur)"
+    else
+        git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+    fi
 }
 
 parse_kube_config() {
