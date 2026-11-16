@@ -2,9 +2,10 @@
 
 ## Issue Tracking (beads)
 
-All issue tracking uses **bd (beads)** against a single shared database:
+All issue tracking uses **bd (beads)** against a single shared database per machine:
 
-- Location: `$BEADS_DIR` (`~/serepo/issues/.beads`, set in `~/.bashrc`), prefix `iss`
+- Location: `$BEADS_DIR`, set in the shell rc. Each machine points it at its own
+  database (work and personal are separate), so don't assume a path or prefix.
 - Use this database from every working directory. `bd` resolves it via `BEADS_DIR`.
 - **Never run `bd init`** in another repo or directory. If `bd` reports
   "No active beads workspace found", `BEADS_DIR` is unset — stop and tell the user.

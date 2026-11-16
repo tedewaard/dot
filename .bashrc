@@ -118,7 +118,7 @@ unalias mybd 2>/dev/null  # drop the old alias so re-sourcing works and the func
 function mybd {
   local ids
   # BD_JSON_ENVELOPE=1 opts into the bd v2.0 JSON shape ({schema_version, data:[...]}) for this call only.
-  ids=$(BD_JSON_ENVELOPE=1 bd query 'assignee="Trevor Edewaard" OR owner="trevor.edewaard@parkplacetech.com"' --json | jq -r '.data[].id' | paste -sd,)
+  ids=$(BD_JSON_ENVELOPE=1 bd query "assignee=\"Trevor Edewaard\" OR owner=\"$(git config --global user.email)\"" --json | jq -r '.data[].id' | paste -sd,)
   [ -z "$ids" ] && { echo "No issues found"; return 0; }
   bd list --id "$ids" -n 0 "$@"
 }

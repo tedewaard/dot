@@ -21,8 +21,12 @@
 #     mcp/mcp.json (single file, dir left writable for runtime state)
 #
 #   ~/.pi/agent/:
-#     pi/settings.json, pi/AGENTS.md, pi/extensions/ (dir stays writable for pi's runtime
+#     pi/settings.json, pi/extensions/ (dir stays writable for pi's runtime
 #     state: auth.json, sessions/, bin/, models-store.json, etc.)
+#
+#   Global agent instructions (shared across AI harnesses):
+#     agents/AGENTS.md -> ~/.pi/agent/AGENTS.md (pi)
+#     agents/AGENTS.md -> ~/.claude/CLAUDE.md   (Claude Code)
 #
 #   Agent skills (shared across AI harnesses, Agent Skills standard):
 #     skills/ -> ~/.agents/skills (pi, standard location)
@@ -96,12 +100,10 @@ readonly CONFIG_FILE_TARGETS=(
 # (relative to ~/.pi/agent). Entries may be files or directories.
 readonly PI_SOURCES=(
     "pi/settings.json"
-    "pi/AGENTS.md"
     "pi/extensions"
 )
 readonly PI_TARGETS=(
     "settings.json"
-    "AGENTS.md"
     "extensions"
 )
 
@@ -112,6 +114,16 @@ readonly SKILLS_SOURCE="skills"
 readonly SKILLS_TARGETS=(
     ".agents/skills"
     ".claude/skills"
+)
+
+# Global agent instructions: one harness-neutral file symlinked into each
+# harness's user-level instructions location. Targets are relative to $HOME.
+# Machine-specific details (e.g. which beads database) come from env vars set
+# in the shell rc, so the same file works on work and personal machines.
+readonly AGENTS_SOURCE="agents/AGENTS.md"
+readonly AGENTS_TARGETS=(
+    ".pi/agent/AGENTS.md"
+    ".claude/CLAUDE.md"
 )
 
 # TPM repository URL
@@ -382,6 +394,25 @@ symlink_skills() {
     done
 }
 
+# Symlink the shared agent instructions file into each harness location
+symlink_agents_file() {
+    print_header "Symlinking Agent Instructions"
+
+    local source="$DOTFILES_DIR/$AGENTS_SOURCE"
+
+    if [ ! -f "$source" ]; then
+        print_warning "Skipping missing agent instructions: $AGENTS_SOURCE"
+        return 0
+    fi
+
+    local target_rel
+    for target_rel in "${AGENTS_TARGETS[@]}"; do
+        local target="$HOME/$target_rel"
+        ensure_directory "$(dirname "$target")"
+        create_symlink "$source" "$target"
+    done
+}
+
 # Install Tmux Plugin Manager
 install_tpm() {
     print_header "Installing Tmux Plugin Manager (TPM)"
@@ -538,6 +569,34 @@ verify_installation() {
         done
     fi
 
+    # Check agent instructions symlinks
+    if [ -f "$DOTFILES_DIR/$AGENTS_SOURCE" ]; then
+        local target_rel
+        for target_rel in "${AGENTS_TARGETS[@]}"; do
+            local source="$DOTFILES_DIR/$AGENTS_SOURCE"
+            local target="$HOME/$target_rel"
+
+            ((checked++)) || true
+
+            if [ -L "$target" ]; then
+                local current_target
+                current_target="$(readlink -f "$target")"
+                local expected_target
+                expected_target="$(readlink -f "$source")"
+
+                if [ "$current_target" = "$expected_target" ]; then
+                    ((valid++)) || true
+                else
+                    print_error "Invalid symlink: ${target/#$HOME/\~}"
+                    all_valid=false
+                fi
+            else
+                print_error "Not a symlink: ${target/#$HOME/\~}"
+                all_valid=false
+            fi
+        done
+    fi
+
     # Check pi files
     for i in "${!PI_SOURCES[@]}"; do
         local source="$DOTFILES_DIR/${PI_SOURCES[$i]}"
@@ -637,13 +696,16 @@ main() {
     # Step 6: Symlink shared agent skills
     symlink_skills
 
-    # Step 7: Install TPM
+    # Step 7: Symlink shared agent instructions
+    symlink_agents_file
+
+    # Step 8: Install TPM
     install_tpm
 
-    # Step 8: Verify installation
+    # Step 9: Verify installation
     verify_installation
 
-    # Step 9: Print post-install instructions
+    # Step 10: Print post-install instructions
     print_post_install_instructions
 
     echo -e "${GREEN}${BOLD}✓ Installation successful!${NC}\n"

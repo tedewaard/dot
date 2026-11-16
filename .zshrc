@@ -10,9 +10,19 @@ esac
 
 alias ls='ls --color=auto'
 
-# Adding git branch to command prompt
+# Adding VCS info (jj or git) to command prompt
+# jj: (nearest-bookmark›change-id), ∅ = empty change, ! = conflict
 parse_git_branch() {
-    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+    if jj --ignore-working-copy root >/dev/null 2>&1; then
+        local bm cur
+        bm=$(jj log --ignore-working-copy --no-graph -r 'heads(::@ & bookmarks())' \
+             -T 'bookmarks.map(|b| b.name()).join(",")' 2>/dev/null)
+        cur=$(jj log --ignore-working-copy --no-graph -r @ \
+             -T 'change_id.shortest() ++ if(empty,"∅") ++ if(conflict,"!")' 2>/dev/null)
+        echo "(${bm:+$bm›}$cur)"
+    else
+        git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+    fi
 }
 
 parse_kube_config() {
@@ -83,6 +93,17 @@ alias vim="nvim"
 alias vi="nvim"
 alias v="nvim"
 alias kcpu="kubectl get nodes -o custom-columns='NAME:.metadata.name,CPU:.status.capacity.cpu,MEMORY:.status.capacity.memory'"
+# My open beads (assigned to me OR owned by me), shown as an epic/child tree.
+# bd query can't render trees, so collect the IDs with it and hand them to bd list.
+# Extra args pass through to bd list (e.g. mybd -p 1, mybd --long).
+unalias mybd 2>/dev/null  # drop any old alias so re-sourcing works and the function isn't shadowed
+function mybd {
+  local ids
+  # BD_JSON_ENVELOPE=1 opts into the bd v2.0 JSON shape ({schema_version, data:[...]}) for this call only.
+  ids=$(BD_JSON_ENVELOPE=1 bd query "assignee=\"Trevor Edewaard\" OR owner=\"$(git config --global user.email)\"" --json | jq -r '.data[].id' | paste -sd, -)
+  [ -z "$ids" ] && { echo "No issues found"; return 0; }
+  bd list --id "$ids" -n 0 "$@"
+}
 
 # Flatpak aliases
 alias telegram="flatpak run org.telegram.desktop & disown"
@@ -126,6 +147,9 @@ export PATH=$HOME/.elixir-install/installs/otp/28.1/bin:$PATH
 export PATH=$HOME/.elixir-install/installs/elixir/1.19.0-otp-28/bin:$PATH
 
 export EDITOR=vim
+
+# Personal beads database (work machine sets its own in .bashrc)
+export BEADS_DIR="$HOME/repo/beads/.beads"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
