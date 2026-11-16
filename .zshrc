@@ -135,6 +135,7 @@ set -o vi
 # Completion system
 autoload -Uz compinit && compinit
 compdef k=kubectl
+source <(COMPLETE=zsh jj)
 
 if [ -s "$HOME/.cargo/env" ]; then
     . "$HOME/.cargo/env"
