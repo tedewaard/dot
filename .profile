@@ -52,3 +52,5 @@ export PATH
 test -r /home/tedewaard/.opam/opam-init/init.sh && . /home/tedewaard/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
 
 . "$HOME/.atuin/bin/env"
+
+. "$HOME/.local/bin/env"

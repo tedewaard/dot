@@ -254,3 +254,5 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
 # Load completions last so every tool is on PATH.
 for _c in kubectl flux bd; do _cached_completion "$_c"; done
 unset _c
+
+. "$HOME/.local/bin/env"

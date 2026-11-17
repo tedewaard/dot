@@ -14,7 +14,8 @@
     "npm:pi-mcp-adapter",
     "npm:pi-beads-companion",
     "npm:egm",
-    "npm:@rizkiaprita/egm"
+    "npm:@rizkiaprita/egm",
+    "npm:pi-neuralwatt"
   ],
   "warnings": {
     "anthropicExtraUsage": false
