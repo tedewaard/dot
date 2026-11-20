@@ -43,3 +43,8 @@ I use **jj** (Jujutsu, currently 0.47.x), usually colocated with git. Prefer jj 
   Read-only git commands are fine.
 - Don't push, abandon, or rewrite changes that are already pushed unless I ask.
 - If something goes wrong, check `jj op log`; `jj undo` is available, but tell me before using it.
+
+## MCP servers
+
+- **zoho-sdp** (ManageEngine ServiceDesk Plus Cloud): always use portal `itdesk`
+  for the `portal` path variable. Don't call or ask for `listPortals`.
