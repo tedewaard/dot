@@ -134,7 +134,6 @@ set -o vi
 
 # Completion system
 autoload -Uz compinit && compinit
-compdef k=kubectl
 source <(COMPLETE=zsh jj)
 
 if [ -s "$HOME/.cargo/env" ]; then
@@ -162,6 +161,7 @@ command -v flux >/dev/null 2>&1 && source <(flux completion zsh)
 
 # Enable kubectl completion
 command -v kubectl >/dev/null 2>&1 && source <(kubectl completion zsh)
+compdef k=kubectl
 
 # opencode
 export PATH="$HOME/.opencode/bin:$PATH"
