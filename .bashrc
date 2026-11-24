@@ -246,8 +246,10 @@ acr-login() {
 . "$HOME/.atuin/bin/env"
 eval "$(atuin init bash)"
 
-#Fix for WSL on PPT laptop
-export NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/cisco-umbrella-root.crt
+# Node ignores the system CA store by default. Trust it, so any root added
+# under /usr/local/share/ca-certificates (update-ca-certificates) works in
+# Node too: Cisco Umbrella, PPT Root CA 2017.
+export NODE_USE_SYSTEM_CA=1
 
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
 
