@@ -15,6 +15,14 @@
        "scope": "https://infra-mcp.staging.serviceexpress.com/mcp/Infra.Read offline_access"
      }
    },
+    "infra-mcp-ppt-qa": {
+      "url": "https://qa.parkplacetechnologies.net/infra-mcp/mcp",
+      "auth": "oauth",
+      "oauth": {
+        "clientId": "613d4050-727e-4bdd-a296-632cd55d8fe4",
+        "scope": "https://qa.parkplacetechnologies.net/infra-mcp/mcp/Infra.Read offline_access"
+      }
+    },
     "datto-rmm": {
       "url": "https://datto-mcp.staging.serviceexpress.com/mcp",
       "auth": "oauth",
